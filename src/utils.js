@@ -18,20 +18,20 @@
 */
 
 const bigInt = require("big-integer");
-const Circuit = require("snarkjs/src/circuit");
-const bigInt2 = require("snarkjs/src/bigint");
+const Circuit = require("@tornado/snarkjs/src/circuit");
+const bigInt2 = require("@tornado/snarkjs/src/bigint");
 const hexifyBigInts = require("../tools/stringifybigint").hexifyBigInts;
 const unhexifyBigInts = require("../tools/stringifybigint").unhexifyBigInts;
 const stringifyBigInts = require("../tools/stringifybigint").stringifyBigInts;
 const unstringifyBigInts = require("../tools/stringifybigint").unstringifyBigInts;
-const stringifyBigInts2 = require("snarkjs/src/stringifybigint").stringifyBigInts;
-const unstringifyBigInts2 = require("snarkjs/src/stringifybigint").unstringifyBigInts;
+const stringifyBigInts2 = require("@tornado/snarkjs/src/stringifybigint").stringifyBigInts;
+const unstringifyBigInts2 = require("@tornado/snarkjs/src/stringifybigint").unstringifyBigInts;
 
 function bigInt2BytesLE(_a, len) {
     const b = Array(len);
     let v = bigInt(_a);
-    for (let i=0; i<len; i++) {
-        b[i] = v.and(0xFF).toJSNumber();
+    for (let i = 0; i < len; i++) {
+        b[i] = v.and(0xff).toJSNumber();
         v = v.shiftRight(8);
     }
     return b;
@@ -40,8 +40,8 @@ function bigInt2BytesLE(_a, len) {
 function bigInt2U32LE(_a, len) {
     const b = Array(len);
     let v = bigInt(_a);
-    for (let i=0; i<len; i++) {
-        b[i] = v.and(0xFFFFFFFF).toJSNumber();
+    for (let i = 0; i < len; i++) {
+        b[i] = v.and(0xffffffff).toJSNumber();
         v = v.shiftRight(32);
     }
     return b;
@@ -52,9 +52,9 @@ function convertWitness(witness) {
     const buff = new ArrayBuffer(buffLen);
     const h = {
         dataView: new DataView(buff),
-        offset: 0
+        offset: 0,
     };
-    const mask = bigInt2(0xFFFFFFFF);
+    const mask = bigInt2(0xffffffff);
     for (let i = 0; i < witness.length; i++) {
         for (let j = 0; j < 8; j++) {
             const v = Number(witness[i].shr(j * 32).and(mask));
@@ -73,13 +73,17 @@ function toHex32(number) {
 
 function toSolidityInput(proof) {
     const flatProof = unstringifyBigInts([
-        proof.pi_a[0], proof.pi_a[1],
-        proof.pi_b[0][1], proof.pi_b[0][0],
-        proof.pi_b[1][1], proof.pi_b[1][0],
-        proof.pi_c[0], proof.pi_c[1],
+        proof.pi_a[0],
+        proof.pi_a[1],
+        proof.pi_b[0][1],
+        proof.pi_b[0][0],
+        proof.pi_b[1][1],
+        proof.pi_b[1][0],
+        proof.pi_c[0],
+        proof.pi_c[1],
     ]);
     const result = {
-        proof: "0x" + flatProof.map(x => toHex32(x)).join("")
+        proof: "0x" + flatProof.map((x) => toHex32(x)).join(""),
     };
     if (proof.publicSignals) {
         result.publicSignals = hexifyBigInts(unstringifyBigInts(proof.publicSignals));
@@ -87,11 +91,11 @@ function toSolidityInput(proof) {
     return result;
 }
 
-function  genWitness(input, circuitJson) {
+function genWitness(input, circuitJson) {
     const circuit = new Circuit(unstringifyBigInts2(circuitJson));
     const witness = circuit.calculateWitness(unstringifyBigInts2(input));
     const publicSignals = witness.slice(1, circuit.nPubInputs + circuit.nOutputs + 1);
-    return {witness, publicSignals};
+    return { witness, publicSignals };
 }
 
 async function genWitnessAndProve(groth16, input, circuitJson, provingKey) {
@@ -102,4 +106,4 @@ async function genWitnessAndProve(groth16, input, circuitJson, provingKey) {
     return result;
 }
 
-module.exports = {bigInt2BytesLE, bigInt2U32LE, toSolidityInput, genWitnessAndProve};
+module.exports = { bigInt2BytesLE, bigInt2U32LE, toSolidityInput, genWitnessAndProve };

@@ -1,6 +1,6 @@
 const assert = require("assert");
-const refBn128 = require("snarkjs").bn128;
-const refBigInt = require("snarkjs").bigInt;
+const refBn128 = require("@tornado/snarkjs").bn128;
+const refBigInt = require("@tornado/snarkjs").bigInt;
 
 const buildBn128 = require("../index.js").buildBn128;
 
@@ -15,7 +15,7 @@ describe("Basic tests for g1 in bn128", () => {
         bn128.g1_fromMontgomery(p1, p1);
         const d = bn128.g1_getPoint(p1);
 
-        for (let i=0; i<3; i++) {
+        for (let i = 0; i < 3; i++) {
             d[i] = refBigInt(d[i].toString());
         }
 
@@ -39,7 +39,6 @@ describe("Basic tests for g1 in bn128", () => {
         d[1] = refBigInt(d[1].toString());
         d[2] = refBigInt(d[2].toString());
 
-
         assert(d[0].equals(refD[0]));
         assert(d[1].equals(refD[1]));
         assert(d[2].equals(1));
@@ -59,7 +58,7 @@ describe("Basic tests for g1 in bn128", () => {
         bn128.g1_fromMontgomery(p1, p1);
         const d = bn128.g1_getPoint(p1);
 
-        for (let i=0; i<3; i++) {
+        for (let i = 0; i < 3; i++) {
             d[i] = refBigInt(d[i].toString());
         }
 
@@ -96,12 +95,11 @@ describe("Basic tests for g1 in bn128", () => {
         bn128.g1_fromMontgomery(p2, p2);
         const d = bn128.g1_getPoint(p2);
 
-        for (let i=0; i<3; i++) {
+        for (let i = 0; i < 3; i++) {
             d[i] = refBigInt(d[i].toString());
         }
 
         assert(refBn128.G1.equals(d, refD));
-
     }).timeout(10000000);
     it("It should do a basic point doubling in G2", async () => {
         const bn128 = await buildBn128();
@@ -113,8 +111,8 @@ describe("Basic tests for g1 in bn128", () => {
         bn128.g2_fromMontgomery(p1, p1);
         const d = bn128.g2_getPoint(p1);
 
-        for (let i=0; i<3; i++) {
-            for (let j=0; j<2; j++) {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 2; j++) {
                 d[i][j] = refBigInt(d[i][j].toString());
             }
         }
@@ -135,8 +133,8 @@ describe("Basic tests for g1 in bn128", () => {
         bn128.g2_fromMontgomery(p2, p2);
         const d = bn128.g2_getPoint(p2);
 
-        for (let i=0; i<3; i++) {
-            for (let j=0; j<2; j++) {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 2; j++) {
                 d[i][j] = refBigInt(d[i][j].toString());
                 assert(d[i][j].equals(refD[i][j]));
             }
