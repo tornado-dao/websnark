@@ -22,7 +22,7 @@
     "license": "GPL-3.0",
     "repository": {
         "type": "git",
-        "url": "https://git.tornado.ws/tornado-packages/websnark"
+        "url": "https://codeberg.org/torndao/websnark"
     },
     "devDependencies": {
         "browserify": "^16.2.3",
