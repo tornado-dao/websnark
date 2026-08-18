@@ -22,7 +22,7 @@
     "license": "GPL-3.0",
     "repository": {
         "type": "git",
-        "url": "https://codeberg.org/torndao/websnark"
+        "url": "https://github.com/tornado-dao/websnark.git"
     },
     "devDependencies": {
         "browserify": "^16.2.3",
@@ -34,7 +34,7 @@
         "wasmbuilder": "0.0.3"
     },
     "dependencies": {
-        "@tornado/snarkjs": "^0.1.20",
+        "@tornado/snarkjs": "git+https://github.com/tornado-dao/snarkjs.git#7af5831fe569708970a91ae47cca9abaf6869881",
         "big-integer": "1.6.42"
     }
 }
